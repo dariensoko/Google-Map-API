@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="style.css">
+  <title>My Google Map</title>
+</head>
+<body>
+  <h1>My Google Map</h1>
+<div id="map"></div>
+
+<script>
+  function initMap() {
+
+    //Map Options
+    var options = {
+      zoom:8,
+      center:{lat:49.8950,lng:-97.1384}
+    };
+
+    //New Map
+    var map = new google.maps.Map(document.getElementById('map'), options);
+
+    // Listen for click on map
+    google.maps.event.addListener(map, 'click',
+    function(event) {
+      addMarker({coords:event.latLng});
+    });
+
+    // Array of markers
+    var markers = [
+      {
+        coords:{lat:49.9391,lng:-96.8426},
+        iconImage:'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+        content:'<h1>Oakbank</h1>'
+      },
+      {
+        coords:{lat:49.8859,lng:-96.8428},
+        content:'<h1>Dugald</h1>'
+      },
+      {
+        coords:{lat:49.8950,lng:-97.1384}
+      }
+    ];
+
+    //Loop through markers
+    for (var i = 0; i < markers.length; i++) {
+      addMarker(markers[i]);
+    }
+
+    //Add Marker function
+    function addMarker(props) {
+      var marker = new google.maps.Marker({
+        position:props.coords,
+        map:map,
+      });
+
+      //Check for custom icons
+      if(props.iconImage){
+        // Set Icon
+        marker.setIcon(props.iconImage);
+      }
+
+      // Check content
+      if(props.content){
+        var infoWindow = new google.maps.InfoWindow({
+          content:props.content
+        });
+
+        marker.addListener('click', function() {
+          infoWindow.open(map, marker);
+        });
+      }
+    }
+  }
+
+</script>
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAaP1WgdPXR6kD5Y0Z17e_i9wCrz-ccK2c&callback=initMap">
+</script>
+
+</body>
+</html>
